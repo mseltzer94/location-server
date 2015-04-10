@@ -46,10 +46,10 @@ app.post('/sendLocation', function(request, response) {
 	db.collection('locations', function(error1, coll) {
 		var id = coll.insert(toInsert, function(error2, saved) {
 			if (error2) {
-				response.send(500);
+				response.send("{'error':'Whoops, something is wrong with your data!'}");
 			}
-			else {
-				response.send(coll.find());
+			else {			
+					response.send(JSON.stringify(coll));
 			}
 	    });
 	});
