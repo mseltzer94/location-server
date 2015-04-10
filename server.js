@@ -48,9 +48,21 @@ app.post('/sendLocation', function(request, response) {
 			if (error2) {
 				response.send("{'error':'Whoops, something is wrong with your data!'}");
 			}
-			else {			
-					console.log(JSON.stringify(coll));
-					response.send(JSON.stringify(coll));
+			else {
+					//http://stackoverflow.com/questions/11616630/json-stringify-avoid-typeerror-converting-circular-structure-to-json
+					json  = JSON.stringify(o, function(key, value) {
+						    if (typeof value === 'object' && value !== null) {
+						        if (cache.indexOf(value) !== -1) {
+						            // Circular reference found, discard key
+						            return;
+						        }
+						        // Store value in our collection
+						        cache.push(value);
+						    }
+						    return value;
+						});			
+					console.log(json);
+					response.send(json);
 			}
 	    });
 	});
