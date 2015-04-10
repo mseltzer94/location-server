@@ -33,15 +33,37 @@ app.post('/feedme', function(request, response) {
 	});
 });
 
+app.post('/sendLocation', function(request, response) {
+	var login = request.body.login;
+	var lat = request.body.lat;
+	var lng = request.body.lng;
+	var toInsert = {
+		"login": login,
+		"lat": lat,
+		"lon": lng,
+	};
+
+	db.collection('locations', function(error1, coll) {
+		var id = coll.insert(toInsert, function(error2, saved) {
+			if (error2) {
+				response.send(500);
+			}
+			else {
+				response.send(200);
+			}
+	    });
+	});
+});
+
 app.get('/', function(request, response) {
 	response.set('Content-Type', 'text/html');
 	var indexPage = '';
-	db.collection('fooditems', function(er, collection) {
+	db.collection('locations', function(er, collection) {
 		collection.find().toArray(function(err, cursor) {
 			if (!err) {
 				indexPage += "<!DOCTYPE HTML><html><head><title>What Did You Feed Me?</title></head><body><h1>What Did You Feed Me?</h1>";
 				for (var count = 0; count < cursor.length; count++) {
-					indexPage += "<p>You fed me " + cursor[count].fooditem + "!</p>";
+					indexPage += "<p>You fed me " + cursor[count].login + "!</p>";
 				}
 				indexPage += "</body></html>"
 				response.send(indexPage);
