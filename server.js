@@ -49,7 +49,7 @@ app.post('/sendLocation', function(request, response) {
 				response.send(500);
 			}
 			else {
-				response.send(db.coll.find());
+				response.send(coll.find());
 			}
 	    });
 	});
