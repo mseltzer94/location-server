@@ -50,7 +50,7 @@ app.get('/', function(request, response) {
 	db.collection('locations', function(er, collection) {
 		collection.find().toArray(function(err, cursor) {
 			if (!err) {
-				indexPage += "<!DOCTYPE HTML><html><head><title>What Did You Feed Me?</title></head><body><h1>MMAP Locations</h1>";
+				indexPage += "<!DOCTYPE HTML><html><head><title>MMAP Locations</title></head><body><h1>MMAP Locations</h1>";
 				for (var count = (cursor.length - 1); count >= 0; count--) {
 					indexPage += "<p>"+ cursor[count].login +" checked in at " + cursor[count].lat + ", " + cursor[count].lng + " on "+ cursor[count].created_at + "</p>";
 				}
