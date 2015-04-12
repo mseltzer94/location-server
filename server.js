@@ -20,6 +20,7 @@ app.post('/feedme', function(request, response) {
 	var toInsert = {
 		"fooditem": fooditem,
 	};
+
 	db.collection('fooditems', function(error1, coll) {
 		var id = coll.insert(toInsert, function(error2, saved) {
 			if (error2) {
@@ -37,21 +38,19 @@ app.post('/sendLocation', function(request, response) {
 	var login = request.body.login;
 	var lat = request.body.lat;
 	var lng = request.body.lng;
-	var toInsert = {
-		"login": login,
-		"lat": lat,
-		"lon": lng,
-	};
+	var date = new Date();
+
 
 	db.collection('locations', function(error1, coll) {
-		var id = coll.insert(toInsert, function(error2, saved) {
-			if (error2 || error1) {
+
+		var id = coll.update({login:login}, {$set:{lng:lng, lat:lat, created_at: date}}, {upsert:true}, function(error2, saved) {
+			if (!login || !lng || !lat || error1) {
 				response.send("{'error':'Whoops, something is wrong with your data!'}");
 			}
 			else { 
-				//x = db.coll.find().toArray(); 
-				//console.log(JSON.stringify(x));
-				response.send(200);
+				db.collection('locations').find({}).toArray(function(err, results){
+					response.send(results);
+				});
 			}
 	    });
 	});
