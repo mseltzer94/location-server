@@ -56,29 +56,31 @@ app.post('/sendLocation', function(request, response) {
 	});
 });
 
+app.get('/location.json', function(request, response) {
+	db.collection('locations').find({login:request.query.login}).toArray(function(err, results){
+					response.send(results);
+	});
+});
+
 app.get('/', function(request, response) {
 	response.set('Content-Type', 'text/html');
 	var indexPage = '';
 	db.collection('locations', function(er, collection) {
 		collection.find().toArray(function(err, cursor) {
 			if (!err) {
-				indexPage += "<!DOCTYPE HTML><html><head><title>What Did You Feed Me?</title></head><body><h1>What Did You Feed Me?</h1>";
-				for (var count = 0; count < cursor.length; count++) {
-					indexPage += "<p>You fed me " + cursor[count].login + "!</p>";
+				indexPage += "<!DOCTYPE HTML><html><head><title>What Did You Feed Me?</title></head><body><h1>MMAP Locations</h1>";
+				for (var count = (cursor.length - 1); count >= 0; count--) {
+					indexPage += "<p>"+ cursor[count].login +" checked in at " + cursor[count].lat + " " + cursor[count].lng + " on "+ cursor[count].created_at + "</p>";
 				}
 				indexPage += "</body></html>"
 				response.send(indexPage);
 			} else {
-				response.send('<!DOCTYPE HTML><html><head><title>What Did You Feed Me?</title></head><body><h1>Whoops, something went terribly wrong!</h1></body></html>');
+				response.send('<!DOCTYPE HTML><html><head><title>MMAP</title></head><body><h1>Whoops, something went terribly wrong!</h1></body></html>');
 			}
 		});
 	});
 });
 
-app.get('/jackson', function(request, response){
-	response.set('Content-Type', 'text/html');
-	response.send("Hi Jackson");
-});
 
 // Oh joy! http://stackoverflow.com/questions/15693192/heroku-node-js-error-web-process-failed-to-bind-to-port-within-60-seconds-of
 app.listen(process.env.PORT || 3000);
