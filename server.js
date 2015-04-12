@@ -48,8 +48,7 @@ app.post('/sendLocation', function(request, response) {
 			if (error2 || error1) {
 				response.send("{'error':'Whoops, something is wrong with your data!'}");
 			}
-			else {
-				response.send(200);
+			else { 
 				x = db.coll.find().toArray(); 
 				response.send(JSON.stringify(x));
 			}
