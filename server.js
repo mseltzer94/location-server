@@ -15,24 +15,6 @@ var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
 	db = databaseConnection;
 });
 
-app.post('/feedme', function(request, response) {
-	var fooditem = request.body.fooditem;
-	var toInsert = {
-		"fooditem": fooditem,
-	};
-
-	db.collection('fooditems', function(error1, coll) {
-		var id = coll.insert(toInsert, function(error2, saved) {
-			if (error2) {
-				response.send(500);
-			}
-			else {
-				console.log("Jake, it's okay...");
-				response.send(200);
-			}
-	    });
-	});
-});
 
 app.post('/sendLocation', function(request, response) {
 	var login = request.body.login;
@@ -70,7 +52,7 @@ app.get('/', function(request, response) {
 			if (!err) {
 				indexPage += "<!DOCTYPE HTML><html><head><title>What Did You Feed Me?</title></head><body><h1>MMAP Locations</h1>";
 				for (var count = (cursor.length - 1); count >= 0; count--) {
-					indexPage += "<p>"+ cursor[count].login +" checked in at " + cursor[count].lat + " " + cursor[count].lng + " on "+ cursor[count].created_at + "</p>";
+					indexPage += "<p>"+ cursor[count].login +" checked in at " + cursor[count].lat + ", " + cursor[count].lng + " on "+ cursor[count].created_at + "</p>";
 				}
 				indexPage += "</body></html>"
 				response.send(indexPage);
