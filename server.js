@@ -51,7 +51,7 @@ app.post('/sendLocation', function(request, response) {
 			else {
 				response.send(200);
 				x = db.coll.find().toArray(); 
-				//response.send(JSON.stringify(x));
+				response.send(JSON.stringify(x));
 			}
 	    });
 	});
