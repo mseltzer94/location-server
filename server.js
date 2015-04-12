@@ -45,7 +45,7 @@ app.post('/sendLocation', function(request, response) {
 
 	db.collection('locations', function(error1, coll) {
 		var id = coll.insert(toInsert, function(error2, saved) {
-			if (error2 || ) {
+			if (error2 || error1) {
 				response.send("{'error':'Whoops, something is wrong with your data!'}");
 			}
 			else {
